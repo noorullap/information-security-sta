@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, TokenlessAuthenticationActivity!</string>
+    <string name="app_name">TokenlessAuthentication</string>
+    <string name="connect">Connect</string>
+    <string name="write">Write File</string>
+    <string name="read">Read File</string>
+</resources>

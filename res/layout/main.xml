@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <Button android:id="@+id/connect" 
+        android:text="@string/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button android:text="@string/write" 
+        android:id="@+id/write" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" />
+    <Button android:text="@string/read" 
+        android:id="@+id/read" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" />
+    <EditText android:id="@+id/body" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
