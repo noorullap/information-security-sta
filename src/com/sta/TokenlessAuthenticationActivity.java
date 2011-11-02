@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,8 @@ public class TokenlessAuthenticationActivity extends Activity {
 	public static final int READ_ID = Menu.FIRST + 2;
 
 	private EditText mBodyText;
-
+	private String FileName = "aaas.txt";
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,10 @@ public class TokenlessAuthenticationActivity extends Activity {
             connect_to_server();
             return true;
         case WRITE_ID:
-        	writeFile("aaas");
+        	writeFile(FileName);
         	return true;
         case READ_ID:
-        	readFile("aaas");
+        	readFile(FileName);
         }
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -66,26 +67,20 @@ public class TokenlessAuthenticationActivity extends Activity {
     
     private void writeFile(String path) throws IOException{
         String body = mBodyText.getText().toString();
-    	File file = new File(path);
-    	file.createNewFile();
-        FileOutputStream fOut = openFileOutput(file.getAbsolutePath(), MODE_WORLD_READABLE);
-        OutputStreamWriter osw = new OutputStreamWriter(fOut);
-        osw.write(body);
-        osw.flush();
-        osw.close();
-    	return;
+        FileOutputStream fos = openFileOutput( path, Context.MODE_PRIVATE);
+        fos.write( body.getBytes());
+        fos.close();
+        mBodyText.setText("done!");
+        return;
     }
     
     private void readFile( String path) throws IOException{
-       	File file = new File(path);
-       	if ( file.exists()) {
-            FileInputStream fIn = openFileInput(file.getAbsolutePath());
-            InputStreamReader isr = new InputStreamReader(fIn);
-            char[] inputBuffer = new char[1000];
-            isr.read(inputBuffer);
-            String read = new String(inputBuffer);
-        	mBodyText.setText( read);
-      	}
+        FileInputStream fis = openFileInput( path);
+        byte[] inputBuffer = new byte[1000];
+        fis.read(inputBuffer);
+        fis.close();
+        String read = new String(inputBuffer);
+     	mBodyText.setText( read);
     }
     
 }
