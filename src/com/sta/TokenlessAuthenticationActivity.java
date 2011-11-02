@@ -1,11 +1,9 @@
 package com.sta;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,7 +24,7 @@ public class TokenlessAuthenticationActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.start_win);
         setTitle( R.string.app_name);
         mBodyText = (EditText) findViewById( R.id.body);
     }
@@ -34,7 +32,7 @@ public class TokenlessAuthenticationActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, CONNECT_ID, 0, R.string.connect);
+        menu.add(0, CONNECT_ID, 0, R.string.sign_in);
         menu.add(0, WRITE_ID, 0, R.string.write);
         menu.add(0, READ_ID, 0, R.string.read);
         

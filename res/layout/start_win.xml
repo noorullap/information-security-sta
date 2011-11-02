@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="@string/login" 
+            android:layout_weight="1"/>
+        
+        <EditText android:id="@+id/login" 
+          android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_weight="4"/>
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="@string/pin"
+            android:layout_weight="1" />
+        
+        <EditText android:id="@+id/pin" 
+          android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_weight="4"/>
+    </LinearLayout>
+ 
+    <Button android:id="@+id/sign_in" 
+        android:text="@string/sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button android:id="@+id/init_reg" 
+        android:text="@string/init_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText android:id="@+id/body" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
+
+</LinearLayout>

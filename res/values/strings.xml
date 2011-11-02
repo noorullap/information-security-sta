@@ -2,7 +2,12 @@
 <resources>
     <string name="hello">Hello World, TokenlessAuthenticationActivity!</string>
     <string name="app_name">TokenlessAuthentication</string>
-    <string name="connect">Connect</string>
+    <string name="sign_in">Sign In</string>
+    <string name="init_reg">Initial Registration</string>
+    <string name="init_passw">Initial Password</string>
+    <string name="register">Register</string>
     <string name="write">Write File</string>
     <string name="read">Read File</string>
+    <string name="login">Login</string>
+    <string name="pin">PIN</string>
 </resources>
