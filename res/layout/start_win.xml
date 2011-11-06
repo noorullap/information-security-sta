@@ -29,11 +29,24 @@
             android:layout_weight="1" />
         
         <EditText android:id="@+id/pin" 
-          android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:layout_weight="4"/>
     </LinearLayout>
  
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="@string/init_passw"/>
+        
+        <EditText android:id="@+id/init_passw" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    
     <Button android:id="@+id/sign_in" 
         android:text="@string/sign_in"
         android:layout_width="wrap_content"
@@ -43,10 +56,5 @@
         android:text="@string/init_reg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <EditText android:id="@+id/body" 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
 
 </LinearLayout>

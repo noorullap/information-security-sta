@@ -10,4 +10,5 @@
     <string name="read">Read File</string>
     <string name="login">Login</string>
     <string name="pin">PIN</string>
+    <string name="clear_debug">Clear!</string>
 </resources>
