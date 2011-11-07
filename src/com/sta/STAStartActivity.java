@@ -81,8 +81,8 @@ public class STAStartActivity extends Activity {
     	String login = mLoginText.getText().toString();
     	String pin = mPINText.getText().toString();
     	
-    	if ( login.intern() == LOGIN_DEF.intern() 
-    		 && pin.intern() == PIN_DEF.intern() ){
+    	if ( LOGIN_DEF.equals(login) 
+    		 && PIN_DEF.equals(pin) ){
             Log.d(TAG, "sign_in: authentication done");
     		startActivity( new Intent(this, STAMainActivity.class));
     	} else {
@@ -97,8 +97,8 @@ public class STAStartActivity extends Activity {
     	String login = mLoginText.getText().toString();
     	String init_passw = mIPasswText.getText().toString();
     	
-    	if ( login.intern() == LOGIN_DEF.intern() 
-    		 && init_passw.intern() == IPASSW_DEF.intern() ){
+    	if ( LOGIN_DEF.equals(login) 
+    		 && IPASSW_DEF.equals(init_passw) ){
             Log.d(TAG, "init_reg: login and initial password are correct");
             Date time = new Date();
             String text = "Auto-generated file at "+time.toString();
