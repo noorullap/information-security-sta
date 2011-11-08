@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import connections.HTTPConnection;
 
 public class STAStartActivity extends Activity {
 	private static final String TAG = "STAStart";
@@ -25,6 +26,7 @@ public class STAStartActivity extends Activity {
 	private static final String IPASSW_DEF = "default";
 	private static String FileName = "aaas.txt";
 	public static final int CLEAR_D_ID = Menu.FIRST;
+	private HTTPConnection httpConnection = null;
 
 	private EditText mLoginText, mPINText, mIPasswText;
 
@@ -38,8 +40,15 @@ public class STAStartActivity extends Activity {
         mLoginText = (EditText) findViewById( R.id.login);
         mPINText = (EditText) findViewById( R.id.pin);
         mIPasswText = (EditText) findViewById( R.id.init_passw);
+        httpConnection = new HTTPConnection();
         Button signinButton = (Button) findViewById(R.id.sign_in);
         Button initregButton = (Button) findViewById(R.id.init_reg);
+        
+        try {
+			httpConnection.createConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         signinButton.setOnClickListener(new View.OnClickListener() {
 
@@ -56,6 +65,10 @@ public class STAStartActivity extends Activity {
             	start_initreg();
             }
         });
+        
+        
+        //httpConnection.closeConnection(); Call this when the work with the server is completed
+        
         
     }
     
@@ -81,6 +94,18 @@ public class STAStartActivity extends Activity {
     	String login = mLoginText.getText().toString();
     	String pin = mPINText.getText().toString();
     	
+    	
+    	/*Here you can talk with server*/
+	/*	try {
+			httpConnection.sendMessage("Hello!");
+
+			String str = httpConnection.receiveMessage();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
+    	
     	if ( LOGIN_DEF.equals(login) 
     		 && PIN_DEF.equals(pin) ){
             Log.d(TAG, "sign_in: authentication done");
@@ -96,6 +121,20 @@ public class STAStartActivity extends Activity {
     private void start_initreg(){
     	String login = mLoginText.getText().toString();
     	String init_passw = mIPasswText.getText().toString();
+    	
+    	/*Here you can talk with server*/
+    	/*	try {
+    			httpConnection.sendMessage("Hello!");
+
+    			String str = httpConnection.receiveMessage();
+
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    		*/
+    	
+    	
+    	
     	
     	if ( LOGIN_DEF.equals(login) 
     		 && IPASSW_DEF.equals(init_passw) ){
@@ -117,10 +156,10 @@ public class STAStartActivity extends Activity {
 		    	e.printStackTrace();
 			}
     	} else {
-            Log.d(TAG, "init_reg: incorrect login or password");
-            Log.d(TAG, "init_reg: login \"" + login + "\"");
-            Log.d(TAG, "init_reg: init_passw \"" + init_passw + "\"");
-            Toast.makeText(this, "Incorrect login or initial password", Toast.LENGTH_LONG).show();
+//            Log.d(TAG, "init_reg: incorrect login or password");
+//            Log.d(TAG, "init_reg: login \"" + login + "\"");
+//            Log.d(TAG, "init_reg: init_passw \"" + init_passw + "\"");
+//            Toast.makeText(this, "Incorrect login or initial password", Toast.LENGTH_LONG).show();
     	}
 
     }
