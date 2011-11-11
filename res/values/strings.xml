@@ -11,4 +11,5 @@
     <string name="login">Login</string>
     <string name="pin">PIN</string>
     <string name="clear_debug">Clear!</string>
+    <string name="ip_server">IP</string>
 </resources>

@@ -1,4 +1,4 @@
-package connections;
+package com.sta;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,24 +11,34 @@ import java.net.Socket;
 
 public class HTTPConnection {
 
-	private String SERVERIP = "93.175.1.14";
+	private String SERVERIP = "93.175.1.244";
 	private int SERVERPORT = 45000;
 	private Socket socket = null;
+	private static HTTPConnection instance = null;
 	
-	public HTTPConnection() {
-		
-	}
-	
-	public void createConnection() throws IOException {
+	private HTTPConnection(String ip) throws IOException {
+		SERVERIP = ip;
 		InetAddress serverAddr = InetAddress.getByName(SERVERIP);
 		socket = new Socket(serverAddr, SERVERPORT);
+	}
+	
+	public static HTTPConnection getInstance(String ip) {
+		if (instance == null) {
+			try {
+				return new HTTPConnection(ip);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return instance;
 	}
 	
 	public void sendMessage(String message) throws IOException {
 		PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
 				socket.getOutputStream())), true);
 		
-		out.print(message);
+		out.println(message);
 
 	}
 	

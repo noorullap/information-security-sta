@@ -1,6 +1,5 @@
 package com.sta;
 
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import connections.HTTPConnection;
 
 public class STAStartActivity extends Activity {
 	private static final String TAG = "STAStart";
@@ -26,146 +24,156 @@ public class STAStartActivity extends Activity {
 	private static final String IPASSW_DEF = "default";
 	private static String FileName = "aaas.txt";
 	public static final int CLEAR_D_ID = Menu.FIRST;
-	private HTTPConnection httpConnection = null;
+	
+	private HTTPConnection connection = null;
+	
 
-	private EditText mLoginText, mPINText, mIPasswText;
+	private EditText mLoginText, mPINText, mIPasswText, mIPServer;
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.start_win);
+		setTitle(R.string.app_name);
+		mLoginText = (EditText) findViewById(R.id.login);
+		mPINText = (EditText) findViewById(R.id.pin);
+		mIPasswText = (EditText) findViewById(R.id.init_passw);
+		mIPServer = (EditText) findViewById(R.id.ip_server);
+		Button signinButton = (Button) findViewById(R.id.sign_in);
+		Button initregButton = (Button) findViewById(R.id.init_reg);
+
+		signinButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
+				Log.d(TAG, "onClick: signing-in");
+				start_signin();
+			}
+		});
+
+		initregButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
+				Log.d(TAG, "onClick: initial registration");
+				start_initreg();
+			}
+		});
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		menu.add(0, CLEAR_D_ID, 0, R.string.clear_debug);
+
+		return result;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case CLEAR_D_ID:
+			clear_debug();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void start_signin() {
+		Log.d(TAG, "getting instance ");
+		
+		connection = HTTPConnection.getInstance(mIPServer.getText().toString());
+		Log.d(TAG, "instance has been got"+mIPServer.getText().toString());
+
+		String login = mLoginText.getText().toString();
+		String pin = mPINText.getText().toString();
+
+		/* Here you can talk with server */
+		try {
+			
+			connection.sendMessage(login);
+			Log.d(TAG, "sign_in: message has been sent: ");
+
+		
+			Log.d(TAG, "sign_in: Starting receive message: ");
+			String str = connection.receiveMessage();
+			Log.d(TAG, "sign_in: Received message: " + str);
+			
+			mLoginText.setText(str);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+
+		if (LOGIN_DEF.equals(login) && PIN_DEF.equals(pin)) {
+			Log.d(TAG, "sign_in: authentication done");
+			startActivity(new Intent(this, STAMainActivity.class));
+		} else {
+			Log.d(TAG, "sign_in: incorrect login or password");
+			Log.d(TAG, "sign_in: login \"" + login + "\"");
+			Log.d(TAG, "sign_in: pin \"" + pin + "\"");
+			Toast.makeText(this, "Incorrect login or PIN", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void start_initreg() {
+		connection = HTTPConnection.getInstance(mIPServer.getText().toString());
+
+		String login = mLoginText.getText().toString();
+		String init_passw = mIPasswText.getText().toString();
+
+		/* Here you can talk with server */
+		
+		try {
+			
+			connection.sendMessage(login);
+			Log.d(TAG, "sign_in: message has been sent: ");
+
+		
+			Log.d(TAG, "sign_in: Starting receive message: ");
+			String str = connection.receiveMessage();
+			Log.d(TAG, "sign_in: Received message: " + str);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (LOGIN_DEF.equals(login) && IPASSW_DEF.equals(init_passw)) {
+			Log.d(TAG, "init_reg: login and initial password are correct");
+			Date time = new Date();
+			String text = "Auto-generated file at " + time.toString();
+			FileOutputStream fos;
+			try {
+				fos = openFileOutput(FileName, Context.MODE_PRIVATE);
+				fos.write(text.getBytes());
+				fos.close();
+				Log.d(TAG, "init_reg: write successful");
+				Toast.makeText(this, "Initial registration is done", Toast.LENGTH_LONG).show();
+			} catch (FileNotFoundException e) {
+				Log.d(TAG, "init_reg: Could not create " + FileName);
+				e.printStackTrace();
+			} catch (IOException e) {
+				Log.d(TAG, "init_reg: Could not write information to file " + FileName);
+				e.printStackTrace();
+			}
+		} else {
+			Log.d(TAG, "init_reg: incorrect login or password");
+			Log.d(TAG, "init_reg: login \"" + login + "\"");
+			Log.d(TAG, "init_reg: init_passw \"" + init_passw + "\"");
+			Toast.makeText(this, "Incorrect login or initial password", Toast.LENGTH_LONG).show();
+		}
+
+	}
+	
+
+
+	private void clear_debug() {
+		Toast.makeText(this, "Clear is not done", Toast.LENGTH_LONG).show();
+		return;
+	}
 
 	
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_win);
-        setTitle( R.string.app_name);
-        mLoginText = (EditText) findViewById( R.id.login);
-        mPINText = (EditText) findViewById( R.id.pin);
-        mIPasswText = (EditText) findViewById( R.id.init_passw);
-        httpConnection = new HTTPConnection();
-        Button signinButton = (Button) findViewById(R.id.sign_in);
-        Button initregButton = (Button) findViewById(R.id.init_reg);
-        
-        try {
-			httpConnection.createConnection();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-        signinButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: signing-in");
-            	start_signin();
-            }
-        });
-        
-        initregButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: initial registration");
-            	start_initreg();
-            }
-        });
-        
-        
-        //httpConnection.closeConnection(); Call this when the work with the server is completed
-        
-        
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, CLEAR_D_ID, 0, R.string.clear_debug);
-        
-        return result;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-    	case CLEAR_D_ID:
-    		clear_debug();
-    		return true;
-    	}
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void start_signin(){
-    	String login = mLoginText.getText().toString();
-    	String pin = mPINText.getText().toString();
-    	
-    	
-    	/*Here you can talk with server*/
-	/*	try {
-			httpConnection.sendMessage("Hello!");
-
-			String str = httpConnection.receiveMessage();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-    	
-    	if ( LOGIN_DEF.equals(login) 
-    		 && PIN_DEF.equals(pin) ){
-            Log.d(TAG, "sign_in: authentication done");
-    		startActivity( new Intent(this, STAMainActivity.class));
-    	} else {
-            Log.d(TAG, "sign_in: incorrect login or password");
-            Log.d(TAG, "sign_in: login \""+login+"\"");
-            Log.d(TAG, "sign_in: pin \""+pin+"\"");
-            Toast.makeText(this, "Incorrect login or PIN", Toast.LENGTH_LONG).show();
-    	}
-    }
-    
-    private void start_initreg(){
-    	String login = mLoginText.getText().toString();
-    	String init_passw = mIPasswText.getText().toString();
-    	
-    	/*Here you can talk with server*/
-    	/*	try {
-    			httpConnection.sendMessage("Hello!");
-
-    			String str = httpConnection.receiveMessage();
-
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
-    		*/
-    	
-    	
-    	
-    	
-    	if ( LOGIN_DEF.equals(login) 
-    		 && IPASSW_DEF.equals(init_passw) ){
-            Log.d(TAG, "init_reg: login and initial password are correct");
-            Date time = new Date();
-            String text = "Auto-generated file at "+time.toString();
-            FileOutputStream fos;
-			try {
-				fos = openFileOutput( FileName, Context.MODE_PRIVATE);
-	            fos.write( text.getBytes());
-	            fos.close();
-	            Log.d(TAG, "init_reg: write successful");
-	            Toast.makeText(this, "Initial registration is done", Toast.LENGTH_LONG).show();
-	        } catch (FileNotFoundException e) {
-		    	Log.d( TAG, "init_reg: Could not create "+FileName);
-		    	e.printStackTrace();
-			} catch (IOException e) {
-		    	Log.d( TAG, "init_reg: Could not write information to file "+FileName);
-		    	e.printStackTrace();
-			}
-    	} else {
-//            Log.d(TAG, "init_reg: incorrect login or password");
-//            Log.d(TAG, "init_reg: login \"" + login + "\"");
-//            Log.d(TAG, "init_reg: init_passw \"" + init_passw + "\"");
-//            Toast.makeText(this, "Incorrect login or initial password", Toast.LENGTH_LONG).show();
-    	}
-
-    }
-    
-    private void clear_debug(){
-    	Toast.makeText(this, "Clear is not done", Toast.LENGTH_LONG).show();
-    	return;
-    }
 }
