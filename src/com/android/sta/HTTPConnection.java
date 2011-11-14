@@ -1,4 +1,4 @@
-package com.sta;
+package com.android.sta;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

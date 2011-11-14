@@ -1,6 +1,5 @@
-package com.sta;
+package com.android.sta;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class STAStartActivity extends Activity implements OnClickListener{
+public class StartScreen extends Activity implements OnClickListener{
 	private static final String TAG = "STAStart";
 	private static final String LOGIN_DEF = "root";
 	private static final String PIN_DEF = "1234";
@@ -63,12 +62,12 @@ public class STAStartActivity extends Activity implements OnClickListener{
 		
 		case R.id.sign_in:
 			Log.d(TAG, "onClick: signing-in");
-			start_signin();
+			startSignIn();
 			break;
 
 		case R.id.init_reg:
 			Log.d(TAG, "onClick: initial registration");
-			start_initreg();
+			startInitReg();
 			break;
 		
 		}
@@ -96,9 +95,9 @@ public class STAStartActivity extends Activity implements OnClickListener{
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void start_signin() {
-		Log.d(TAG, "getting instance ");
+	private void startSignIn() {
 
+		Log.d(TAG, "getting instance ");
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		String ip_server = settings.getString( getString(R.string.server_host), "127.0.0.1");
 		connection = HTTPConnection.getInstance( ip_server);
@@ -112,7 +111,6 @@ public class STAStartActivity extends Activity implements OnClickListener{
 			
 			connection.sendMessage(login);
 			Log.d(TAG, "sign_in: message has been sent: ");
-
 		
 			Log.d(TAG, "sign_in: Starting receive message: ");
 			String str = connection.receiveMessage();
@@ -129,7 +127,7 @@ public class STAStartActivity extends Activity implements OnClickListener{
 
 		if (LOGIN_DEF.equals(login) && PIN_DEF.equals(pin)) {
 			Log.d(TAG, "sign_in: authentication done");
-			startActivity(new Intent(this, STAMainActivity.class));
+			startActivity(new Intent(this, MainScreen.class));
 		} else {
 			Log.d(TAG, "sign_in: incorrect login or password");
 			Log.d(TAG, "sign_in: login \"" + login + "\"");
@@ -138,7 +136,7 @@ public class STAStartActivity extends Activity implements OnClickListener{
 		}
 	}
 
-	private void start_initreg() {
+	private void startInitReg() {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		String ip_server = settings.getString( getString(R.string.server_host), "127.0.0.1");
 		
@@ -196,12 +194,7 @@ public class STAStartActivity extends Activity implements OnClickListener{
  * new client. 
  */
 	private void clearKey() {
-		File key_file = new File( FileName);
 		
-		if ( key_file.exists()){
-			Toast.makeText(this, "File is existed", Toast.LENGTH_LONG);
-		}
-			
 		if ( deleteFile(FileName)) {
 			Toast.makeText(this, "Clear is done", Toast.LENGTH_LONG).show();
 		} else {

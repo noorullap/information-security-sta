@@ -1,4 +1,4 @@
-package com.sta;
+package com.android.sta;
 
 import android.os.Bundle;
 import android.preference.EditTextPreference;

@@ -1,4 +1,4 @@
-package com.sta;
+package com.android.sta;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-public class STAMainActivity extends Activity {
+public class MainScreen extends Activity {
 	private static final String TAG = "STAStart";
 	private static String FileName = "aaas.txt";
 	
