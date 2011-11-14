@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".STAMainActivity"></activity>
+        <activity android:name=".SettingScreen"></activity>
 
     </application>
 </manifest>
