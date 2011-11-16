@@ -1,39 +1,26 @@
 package com.android.sta;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class StartScreen extends Activity implements OnClickListener{
-	private static final String TAG = "STAStart";
-	private static final String LOGIN_DEF = "root";
-	private static final String PIN_DEF = "1234";
-	private static final String IPASSW_DEF = "default";
+	private static final String TAG = "STA.StartScreen";
 	private static String FileName = "aaas.txt";
 	public static final int CONNECT_OPT_ID = Menu.FIRST;
 	public static final int CLEAR_D_ID = Menu.FIRST+1;
 	
-	private HTTPConnection connection = null;
-	
-
 	private EditText mLoginText, mPINText, mIPasswText;
-
+	private CheckBox mOfflineCheckBox; 
     
 	/** Called when the activity is first created. */
 	@Override
@@ -45,6 +32,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		mLoginText = (EditText) findViewById(R.id.login);
 		mPINText = (EditText) findViewById(R.id.pin);
 		mIPasswText = (EditText) findViewById(R.id.init_passw);
+		mOfflineCheckBox = (CheckBox) findViewById(R.id.offline_mode);
 		
 		/** Button "Sign-in" */
 		Button signinButton = (Button) findViewById(R.id.sign_in);
@@ -96,100 +84,45 @@ public class StartScreen extends Activity implements OnClickListener{
 	}
 
 	private void startSignIn() {
-
-		Log.d(TAG, "getting instance ");
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		String ip_server = settings.getString( getString(R.string.server_host), "127.0.0.1");
-		connection = HTTPConnection.getInstance( ip_server);
-		Log.d(TAG, "instance has been got" + ip_server);
-
 		String login = mLoginText.getText().toString();
 		String pin = mPINText.getText().toString();
 
-		/* Here you can talk with server */
-		try {
-			
-			connection.sendMessage(login);
-			Log.d(TAG, "sign_in: message has been sent: ");
+		MainManager mMainManager = new MainManager();
 		
-			Log.d(TAG, "sign_in: Starting receive message: ");
-			String str = connection.receiveMessage();
-			Log.d(TAG, "sign_in: Received message: " + str);
+		mMainManager.setForSigningIn( this, login, pin, 
+									  !mOfflineCheckBox.isChecked());
+		
+		if ( mMainManager.start())
+		{
 			
-			mLoginText.setText(str);
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		
-		
-		
-
-		if (LOGIN_DEF.equals(login) && PIN_DEF.equals(pin)) {
-			Log.d(TAG, "sign_in: authentication done");
-			startActivity(new Intent(this, MainScreen.class));
-		} else {
-			Log.d(TAG, "sign_in: incorrect login or password");
-			Log.d(TAG, "sign_in: login \"" + login + "\"");
-			Log.d(TAG, "sign_in: pin \"" + pin + "\"");
+		else {
 			Toast.makeText(this, "Incorrect login or PIN", Toast.LENGTH_LONG).show();
 		}
+
 	}
 
 	private void startInitReg() {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		String ip_server = settings.getString( getString(R.string.server_host), "127.0.0.1");
-		
-		connection = HTTPConnection.getInstance( ip_server);
-
 		String login = mLoginText.getText().toString();
 		String init_passw = mIPasswText.getText().toString();
 
-		/* Here you can talk with server */
+		MainManager mMainManager = new MainManager();
 		
-		try {
+		mMainManager.setForSigningIn( this, login, init_passw, 
+									  !mOfflineCheckBox.isChecked());
+		
+		if ( mMainManager.start())
+		{
 			
-			connection.sendMessage(login);
-			Log.d(TAG, "sign_in: message has been sent: ");
-
-		
-			Log.d(TAG, "sign_in: Starting receive message: ");
-			String str = connection.receiveMessage();
-			Log.d(TAG, "sign_in: Received message: " + str);
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
-		if (LOGIN_DEF.equals(login) && IPASSW_DEF.equals(init_passw)) {
-			Log.d(TAG, "init_reg: login and initial password are correct");
-			Date time = new Date();
-			String text = "Auto-generated file at " + time.toString();
-			FileOutputStream fos;
-			try {
-				fos = openFileOutput(FileName, Context.MODE_PRIVATE);
-				fos.write(text.getBytes());
-				fos.close();
-				Log.d(TAG, "init_reg: write successful");
-				Toast.makeText(this, "Initial registration is done", Toast.LENGTH_LONG).show();
-			} catch (FileNotFoundException e) {
-				Log.d(TAG, "init_reg: Could not create " + FileName);
-				e.printStackTrace();
-			} catch (IOException e) {
-				Log.d(TAG, "init_reg: Could not write information to file " + FileName);
-				e.printStackTrace();
-			}
-		} else {
-			Log.d(TAG, "init_reg: incorrect login or password");
-			Log.d(TAG, "init_reg: login \"" + login + "\"");
-			Log.d(TAG, "init_reg: init_passw \"" + init_passw + "\"");
+		else {
 			Toast.makeText(this, "Incorrect login or initial password", Toast.LENGTH_LONG).show();
 		}
+		
 
 	}
 	
-
-/*
+/**
  * This functionality added for delete all keys in phone memory for simulating
  * new client. 
  */
@@ -202,6 +135,9 @@ public class StartScreen extends Activity implements OnClickListener{
 		}
 	}
 	
+/**
+ * String setting screen 
+ */
 	public void startPreferences() {
         Intent i = new Intent(this, SettingScreen.class);
         startActivity(i);

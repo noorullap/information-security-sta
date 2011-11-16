@@ -15,11 +15,12 @@ public final class R {
     }
     public static final class id {
         public static final int init_passw=0x7f060003;
-        public static final int init_reg=0x7f060005;
+        public static final int init_reg=0x7f060006;
         public static final int login=0x7f060001;
         public static final int maintext=0x7f060000;
+        public static final int offline_mode=0x7f060004;
         public static final int pin=0x7f060002;
-        public static final int sign_in=0x7f060004;
+        public static final int sign_in=0x7f060005;
     }
     public static final class layout {
         public static final int main_win=0x7f030000;
@@ -33,6 +34,7 @@ public final class R {
         public static final int init_reg=0x7f050003;
         public static final int ip_server=0x7f05000b;
         public static final int login=0x7f050008;
+        public static final int offline_mode=0x7f050012;
         public static final int pin=0x7f050009;
         public static final int pref_connect_host=0x7f05000e;
         public static final int pref_connect_port=0x7f05000f;

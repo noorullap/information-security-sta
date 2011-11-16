@@ -18,4 +18,5 @@
     <string name="pref_connect_port">Port</string>
     <string name="server_host">server_host</string>
     <string name="server_port">server_port</string>
+    <string name="offline_mode">Offline mode</string>
 </resources>

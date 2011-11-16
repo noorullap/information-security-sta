@@ -48,6 +48,10 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
     
+    <CheckBox android:text="@string/offline_mode" 
+        android:id="@+id/offline_mode" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" />
    
     <Button android:id="@+id/sign_in" 
         android:text="@string/sign_in"
