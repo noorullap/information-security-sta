@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +23,101 @@ public class MainManager {
 	private static final String PIN_DEF = "1234";
 	private static final String INIT_PASSW_DEF = "default";
 	private static final String FILENAME = "aaas.txt";
+	private List<String> accountNumbers = null; // in future
+	private String accountNumber = null;
+	private String balance = null;
 	private boolean isOnline, res;
 	private String login, pin, init_passw;
 	private int mode = DEFAULT_MODE;
+	private static MainManager instance = new MainManager();
+	
 	private Context context;
 	private HTTPConnection connection = null;
+	
+	private MainManager() {
+		
+	}
+	
+	public static MainManager getInstance() {
+		return instance;
+	}
+	
+	public String getBalanceFromServer(String accountNumber) { //in future
+		String ret = null;
+		
+		if (connection != null) {
+			
+			try {
+				connection.sendMessage("2 " + accountNumber);
+
+				String ans = connection.receiveMessage();
+
+				Pattern pat = Pattern.compile("(2)\\s([0-9]*)");
+				Matcher mat = pat.matcher(ans);
+
+				if (mat.matches()) {
+					ret = mat.group(2);
+				}
+
+			} catch (IOException e) {
+				Log.e( TAG, "server isn't connected::getBalanceFromServer");
+				e.printStackTrace();
+			}
+
+		}
+		
+		return ret;
+	}
+	
+	public boolean transferMoney(String source, String dest, String sum) {
+		boolean ret = false;
+		
+		connection = HTTPConnection.getInstance( "93.175.1.76");
+		
+		if (connection != null) {
+
+			try {
+				connection.sendMessage("3 " + source + " " + dest + " " + sum + " ");
+
+				String ans = connection.receiveMessage();
+				
+				Log.d(TAG, "connection.receiveMessage():"+ ans);
+
+				Pattern pat = Pattern.compile("(3)\\s(true|false)");
+				Matcher mat = pat.matcher(ans);
+
+				if (mat.matches()) {
+					String trueOrFalse = mat.group(2);
+					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
+					if( trueOrFalse.equals("true") ) {
+						ret = true;
+					}
+				}
+
+			} catch (IOException e) {
+				Log.d(TAG, "server isn't connected::getBalanceFromServer");
+				e.printStackTrace();
+			}
+
+		}
+
+		return ret;
+	}
+	
+	public String getAccountNumberFromServer() {
+		
+		if (connection != null) {
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		return accountNumber;
+	}
 	
 	public void setForSigningIn( Context context, String login, 
 								 String pin, boolean isOnline){
@@ -105,6 +198,10 @@ public class MainManager {
 		if ( isOnline ){
 			try {
 				Log.d(TAG, "sending login");
+				
+				
+				
+				
 				connection.sendMessage(login);
 				/* TODO: implement receiving confirmation from server */
 			} catch (Exception e) {
@@ -181,4 +278,14 @@ public class MainManager {
 			res = false;
 		}
 	}
+	
+	public String getBalance() {
+		return balance;
+	}
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	
+	
 }

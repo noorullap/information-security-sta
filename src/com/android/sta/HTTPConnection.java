@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class HTTPConnection {
 
-	private String SERVERIP = "93.175.1.244";
+	private String SERVERIP = null;
 	private int SERVERPORT = 45000;
 	private Socket socket = null;
 	private static HTTPConnection instance = null;

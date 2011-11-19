@@ -87,7 +87,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		String login = mLoginText.getText().toString();
 		String pin = mPINText.getText().toString();
 
-		MainManager mMainManager = new MainManager();
+		MainManager mMainManager = MainManager.getInstance();
 		
 		mMainManager.setForSigningIn( this, login, pin, 
 									  !mOfflineCheckBox.isChecked());
@@ -106,7 +106,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		String login = mLoginText.getText().toString();
 		String init_passw = mIPasswText.getText().toString();
 
-		MainManager mMainManager = new MainManager();
+		MainManager mMainManager = MainManager.getInstance();
 		
 		mMainManager.setForSigningIn( this, login, init_passw, 
 									  !mOfflineCheckBox.isChecked());
