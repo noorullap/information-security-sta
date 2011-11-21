@@ -13,8 +13,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
-public class MainManager {
+public class MainManager extends Object{
 	private static final String TAG = "STA.MainManager";
 	private static final int DEFAULT_MODE = 0;
 	private static final int SIGNIN_MODE = 1;
@@ -107,15 +108,8 @@ public class MainManager {
 	public String getAccountNumberFromServer() {
 		
 		if (connection != null) {
-			
-			
-			
-			
+
 		}
-		
-		
-		
-		
 		return accountNumber;
 	}
 	
@@ -166,10 +160,19 @@ public class MainManager {
 		return res;
 		
 	}
-	
+	  
 	private void startMainScreen() {
 		if (res)
-			context.startActivity(new Intent(context, MainScreen.class));
+		{
+			Intent intent = new Intent();
+			intent.setClass( context, MainScreen.class);
+			
+			intent.putExtra( MainScreen.EXT_ACCOUNT, accountNumber);
+			context.startActivity( intent);
+		} else{
+			Toast.makeText(context, "Incorrect login or password", Toast.LENGTH_LONG).show();
+		}
+			
 	}
 
 	private void receiveAccountData() {

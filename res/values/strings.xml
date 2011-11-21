@@ -19,4 +19,11 @@
     <string name="server_host">server_host</string>
     <string name="server_port">server_port</string>
     <string name="offline_mode">Offline mode</string>
+    <string name="account">Account</string>
+    <string name="balance">Balance</string>
+    <string name="refresh">Refresh</string>
+    <string name="source">Source</string>
+    <string name="destination">Destination</string>
+    <string name="amount">Amount</string>
+    <string name="transfer">Transfer</string>
 </resources>

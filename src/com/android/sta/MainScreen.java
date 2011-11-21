@@ -1,43 +1,80 @@
 package com.android.sta;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;	
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class MainScreen extends Activity {
+public class MainScreen extends Activity implements OnClickListener{
 	private static final String TAG = "STAStart";
-	private static String FileName = "aaas.txt";
+	private String account;
+	private EditText mAccountText, mBalanceText, mSourceText, mDestinationText, mAmountText;
+	private MainManager mMainManager;
+	
+	public static final String EXT_ACCOUNT = "account";
+	public static final String EXT_MANAGER = "manager";
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.main_win);
         setTitle(R.string.app_name);
-        byte[] inputBuffer = new byte[1000];      
-        TextView mText = (TextView) findViewById( R.id.maintext); 
-        FileInputStream fis;
+        Bundle extras = getIntent().getExtras();
+        account = extras.getString(EXT_ACCOUNT);
+        mMainManager = MainManager.getInstance();
+        
+        mAccountText = (EditText) findViewById(R.id.account);
+        mBalanceText = (EditText) findViewById(R.id.balance);
+        mSourceText = (EditText) findViewById(R.id.source);
+        mDestinationText = (EditText) findViewById(R.id.destination);
+        mAmountText = (EditText) findViewById(R.id.amount);
 		
-        try {
-			fis = openFileInput( FileName);
-	        fis.read(inputBuffer);
-	        fis.close();
-	        Log.d(TAG, "read successful");
-	    } catch (FileNotFoundException e) {
-	    	Log.d( TAG, "File "+FileName+" not found");
-	    	e.printStackTrace();
-		} catch (IOException e) {
-	    	Log.d( TAG, "Could not read information from file "+FileName);
-	    	e.printStackTrace();
+        mAccountText.setText(account);
+        mSourceText.setText(account);
+
+		/** Button "Refresh" */
+		Button getBalanceButton = (Button) findViewById(R.id.getBalance);
+		getBalanceButton.setOnClickListener( this);
+
+		/** Button "Transfer" */
+		Button tranferButton = (Button) findViewById(R.id.transfer);
+		tranferButton.setOnClickListener( this);
+
+	}
+
+	/** Handling pressing buttons */
+	public void onClick( View view){
+		switch ( view.getId() ){
+		
+		case R.id.getBalance:
+			Log.d(TAG, "onClick: get Balance");
+			String balance = mMainManager.getBalanceFromServer(account);
+			mBalanceText.setText(balance);
+			break;
+
+		case R.id.transfer:
+			Log.d(TAG, "onClick: transfer");
+			String source = mSourceText.toString();
+			String destination = mDestinationText.toString();
+			String amount = mAmountText.toString();
+			if ( mMainManager.transferMoney(source, destination, amount) )
+			{
+				Log.d(TAG, "onClick: tranfer done");
+				Toast.makeText(this, "Tranfer done!", Toast.LENGTH_LONG).show();
+				
+			} else{
+				Log.d(TAG, "onClick: transfer error");
+				Toast.makeText(this, "Tranfer error!", Toast.LENGTH_LONG).show();
+			}
+			
+			break;
+		
 		}
-
-
-        String read = new String(inputBuffer);
-     	mText.setText( read);
 	}
 
 }
