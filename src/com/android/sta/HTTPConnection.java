@@ -18,7 +18,8 @@ public class HTTPConnection {
 	
 	private HTTPConnection(String ip) throws IOException {
 		SERVERIP = ip;
-		InetAddress serverAddr = InetAddress.getByName(SERVERIP);
+		//InetAddress serverAddr = InetAddress.getByName(SERVERIP);
+		InetAddress serverAddr = InetAddress.getByName("93.175.1.18");
 		socket = new Socket(serverAddr, SERVERPORT);
 	}
 	
@@ -39,6 +40,7 @@ public class HTTPConnection {
 				socket.getOutputStream())), true);
 		
 		out.println(message);
+		out.flush();
 
 	}
 	

@@ -20,7 +20,8 @@ public class StartScreen extends Activity implements OnClickListener{
 	public static final int CLEAR_D_ID = Menu.FIRST+1;
 	
 	private EditText mLoginText, mPINText, mIPasswText;
-	private CheckBox mOfflineCheckBox; 
+	private CheckBox mOfflineCheckBox;
+	private MainManager mMainManager;
     
 	/** Called when the activity is first created. */
 	@Override
@@ -33,6 +34,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		mPINText = (EditText) findViewById(R.id.pin);
 		mIPasswText = (EditText) findViewById(R.id.init_passw);
 		mOfflineCheckBox = (CheckBox) findViewById(R.id.offline_mode);
+		mMainManager = MainManager.getInstance();
 		
 		/** Button "Sign-in" */
 		Button signinButton = (Button) findViewById(R.id.sign_in);
@@ -55,7 +57,7 @@ public class StartScreen extends Activity implements OnClickListener{
 
 		case R.id.init_reg:
 			Log.d(TAG, "onClick: initial registration");
-			startInitReg();
+//			startInitReg();
 			break;
 		
 		}
@@ -86,8 +88,6 @@ public class StartScreen extends Activity implements OnClickListener{
 	private void startSignIn() {
 		String login = mLoginText.getText().toString();
 		String pin = mPINText.getText().toString();
-
-		MainManager mMainManager = MainManager.getInstance();
 		
 		mMainManager.setForSigningIn( this, login, pin, 
 									  !mOfflineCheckBox.isChecked());
@@ -105,8 +105,6 @@ public class StartScreen extends Activity implements OnClickListener{
 	private void startInitReg() {
 		String login = mLoginText.getText().toString();
 		String init_passw = mIPasswText.getText().toString();
-
-		MainManager mMainManager = MainManager.getInstance();
 		
 		mMainManager.setForSigningIn( this, login, init_passw, 
 									  !mOfflineCheckBox.isChecked());
