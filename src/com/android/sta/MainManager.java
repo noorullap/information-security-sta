@@ -56,7 +56,9 @@ public class MainManager extends Object{
 			try {
 				connection.sendMessage("2 " + accountNumber + " ");
 
+				Log.e( TAG, "Start receiving balance");
 				String ans = connection.receiveMessage();
+				Log.e( TAG, "End receiving balance");
 
 				Pattern pat = Pattern.compile("(2)\\s([0-9]*)");
 				Matcher mat = pat.matcher(ans);

@@ -38,8 +38,9 @@ public class HTTPConnection {
 				String port_server = settings.getString(context.getString(R.string.server_port), "45000");
 				Log.d( StartScreen.TAG, "connecting to "+ip_server+":"+port_server);
 				
+				instance = new HTTPConnection(ip_server, port_server);
 				
-				return new HTTPConnection(ip_server, port_server);
+				return instance;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
