@@ -18,7 +18,7 @@ public class HTTPConnection {
 
 	private String SERVERIP = null;
 	private int SERVERPORT = 45000;
-	private Socket socket = null;
+	private static Socket socket = null;
 	private static HTTPConnection instance = null;
 	
 	private HTTPConnection(String ip, String port) throws IOException {
@@ -75,10 +75,12 @@ public class HTTPConnection {
 		
 	}
 	
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
-			socket.close();
-			instance = null;
+			if (instance != null) {
+				socket.close();
+				instance = null;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

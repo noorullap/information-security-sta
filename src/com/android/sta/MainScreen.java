@@ -74,10 +74,12 @@ public class MainScreen extends Activity implements OnClickListener{
 				Log.d(TAG, "onClick: transfer error");
 				Toast.makeText(this, "Tranfer error!", Toast.LENGTH_LONG).show();
 			}
+			break;
 		
 		case R.id.exit:
 			Log.d(TAG,"onClick: exit");
 			/** TODO: add additional code before log out */
+			HTTPConnection.closeConnection();
 			finish();
 			break;
 		
