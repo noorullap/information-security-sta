@@ -18,13 +18,14 @@ public final class R {
         public static final int amount=0x7f060005;
         public static final int balance=0x7f060001;
         public static final int destination=0x7f060004;
+        public static final int exit=0x7f060007;
         public static final int getBalance=0x7f060002;
-        public static final int init_passw=0x7f060009;
-        public static final int init_reg=0x7f06000c;
-        public static final int login=0x7f060007;
-        public static final int offline_mode=0x7f06000a;
-        public static final int pin=0x7f060008;
-        public static final int sign_in=0x7f06000b;
+        public static final int init_passw=0x7f06000a;
+        public static final int init_reg=0x7f06000d;
+        public static final int login=0x7f060008;
+        public static final int offline_mode=0x7f06000b;
+        public static final int pin=0x7f060009;
+        public static final int sign_in=0x7f06000c;
         public static final int source=0x7f060003;
         public static final int transfer=0x7f060006;
     }
@@ -39,6 +40,7 @@ public final class R {
         public static final int balance=0x7f050014;
         public static final int clear_debug=0x7f05000a;
         public static final int destination=0x7f050017;
+        public static final int exit=0x7f05001a;
         public static final int hello=0x7f050000;
         public static final int init_passw=0x7f050004;
         public static final int init_reg=0x7f050003;

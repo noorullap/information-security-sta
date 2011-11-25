@@ -192,6 +192,7 @@ public class MainManager extends Object{
 	private void connectToServer(){
 		if ( isOnline){
 			connection = HTTPConnection.getInstance();
+
 		} else{
 			Log.d( TAG, "offline mode: connection");
 		}

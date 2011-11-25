@@ -45,6 +45,9 @@ public class MainScreen extends Activity implements OnClickListener{
 		Button tranferButton = (Button) findViewById(R.id.transfer);
 		tranferButton.setOnClickListener( this);
 
+		/** Button "Exit" */
+		Button exitButton = (Button) findViewById(R.id.exit);
+		exitButton.setOnClickListener( this);
 	}
 
 	/** Handling pressing buttons */
@@ -71,7 +74,11 @@ public class MainScreen extends Activity implements OnClickListener{
 				Log.d(TAG, "onClick: transfer error");
 				Toast.makeText(this, "Tranfer error!", Toast.LENGTH_LONG).show();
 			}
-			
+		
+		case R.id.exit:
+			Log.d(TAG,"onClick: exit");
+			/** TODO: add additional code before log out */
+			finish();
 			break;
 		
 		}
