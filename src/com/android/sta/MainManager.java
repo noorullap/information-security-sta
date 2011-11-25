@@ -27,6 +27,7 @@ public class MainManager extends Object{
 	private List<String> accountNumbers = null; // in future
 	private String accountNumber = null;
 	private String balance = null;
+	private String keyString = null;
 	private boolean isOnline, res;
 	private String login, pin, init_passw;
 	private int mode = DEFAULT_MODE;
@@ -49,7 +50,7 @@ public class MainManager extends Object{
 		if (connection != null) {
 			
 			try {
-				connection.sendMessage("2 " + accountNumber);
+				connection.sendMessage("2 " + accountNumber + " ");
 
 				String ans = connection.receiveMessage();
 
@@ -72,8 +73,6 @@ public class MainManager extends Object{
 	
 	public boolean transferMoney(String source, String dest, String sum) {
 		boolean ret = false;
-		
-		connection = HTTPConnection.getInstance( "93.175.1.76");
 		
 		if (connection != null) {
 
@@ -137,16 +136,16 @@ public class MainManager extends Object{
 		case SIGNIN_MODE:
 			connectToServer();
 			signIn();
-			receiveNewSetPassw();
-			receiveAccountData();
+			//receiveNewSetPassw();
+			//receiveAccountData();
 			startMainScreen();
 			break;
 		case REGISTER_MODE:
-			connectToServer();
-			register();
-			receiveNewSetPassw();
-			receiveAccountData();
-			startMainScreen();
+//			connectToServer();
+//			register();
+//			receiveNewSetPassw();
+//			receiveAccountData();
+//			startMainScreen();
 			break;
 		case DEFAULT_MODE:
 			Log.e( TAG, "MainManager started without settings options");
@@ -186,11 +185,12 @@ public class MainManager extends Object{
 
 	private void connectToServer(){
 		if ( isOnline){
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-			String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
-			int port_server = settings.getInt(context.getString(R.string.server_port), 45000);
-			Log.d( TAG, "connecting to "+ip_server+":"+port_server);
-			connection = HTTPConnection.getInstance( ip_server);
+//			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+//			String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
+//			int port_server = settings.getInt(context.getString(R.string.server_port), 45000);
+//			Log.d( TAG, "connecting to "+ip_server+":"+port_server);
+//			connection = HTTPConnection.getInstance( ip_server);
+			connection = HTTPConnection.getInstance( "123");
 		} else{
 			Log.d( TAG, "offline mode: connection");
 		}
@@ -200,13 +200,59 @@ public class MainManager extends Object{
 		/* TODO: implement exceptions, in case of incorrect login */
 		if ( isOnline ){
 			try {
+				
 				Log.d(TAG, "sending login");
+
 				
-				
-				
-				
-				connection.sendMessage(login);
+				connection.sendMessage("0 " + login + " " + pin + " ");
 				/* TODO: implement receiving confirmation from server */
+				
+				
+				Log.d(TAG, "receiving answer from server(success or not)");
+				String ans = connection.receiveMessage();
+				Log.d(TAG, "received ans "+ans);
+				
+				
+				Pattern pat = Pattern.compile("(0)\\s(true|false)");
+				Matcher mat = pat.matcher(ans);
+
+				if (mat.matches()) {
+					String trueOrFalse = mat.group(2);
+					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
+					if( trueOrFalse.equals("false") ) {
+						res = false;
+					} else {
+						
+						
+						
+						//SSL here
+						
+						
+						
+						//request for keyString
+						
+						connection.sendMessage("1 " + login + " ");
+						
+						Log.d(TAG, "receiving reyString from the server");
+						String ans2 = connection.receiveMessage();
+						Log.d(TAG, "received ans "+ans2);
+						
+						
+						Pattern pat2 = Pattern.compile("(1)\\s(.*)"); // \\w
+						Matcher mat2 = pat2.matcher(ans2);
+						
+						if (mat2.matches()) {
+							keyString = mat2.group(2);
+							Log.d(TAG, "keyString  "+keyString);
+						}
+						
+					}
+				}
+				
+				
+//				createKeyFile(sPassw);
+
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				res = false;
