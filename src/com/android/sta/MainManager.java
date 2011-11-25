@@ -185,12 +185,11 @@ public class MainManager extends Object{
 
 	private void connectToServer(){
 		if ( isOnline){
-//			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-//			String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
-//			int port_server = settings.getInt(context.getString(R.string.server_port), 45000);
-//			Log.d( TAG, "connecting to "+ip_server+":"+port_server);
-//			connection = HTTPConnection.getInstance( ip_server);
-			connection = HTTPConnection.getInstance( "123");
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+			String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
+			String port_server = settings.getString(context.getString(R.string.server_port), "45000");
+			Log.d( TAG, "connecting to "+ip_server+":"+port_server);
+			connection = HTTPConnection.getInstance( ip_server);
 		} else{
 			Log.d( TAG, "offline mode: connection");
 		}
