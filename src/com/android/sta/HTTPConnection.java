@@ -9,6 +9,11 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 public class HTTPConnection {
 
 	private String SERVERIP = null;
@@ -16,17 +21,25 @@ public class HTTPConnection {
 	private Socket socket = null;
 	private static HTTPConnection instance = null;
 	
-	private HTTPConnection(String ip) throws IOException {
+	private HTTPConnection(String ip, String port) throws IOException {
 		SERVERIP = ip;
-		//InetAddress serverAddr = InetAddress.getByName(SERVERIP);
-		InetAddress serverAddr = InetAddress.getByName("93.175.1.18");
+		SERVERPORT = Integer.valueOf(port).intValue();
+		InetAddress serverAddr = InetAddress.getByName(SERVERIP);
 		socket = new Socket(serverAddr, SERVERPORT);
 	}
 	
-	public static HTTPConnection getInstance(String ip) {
+	public static HTTPConnection getInstance() {
 		if (instance == null) {
 			try {
-				return new HTTPConnection(ip);
+				Context context = MainManager.getInstance().getContext();
+				
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+				String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
+				String port_server = settings.getString(context.getString(R.string.server_port), "45000");
+				Log.d( StartScreen.TAG, "connecting to "+ip_server+":"+port_server);
+				
+				
+				return new HTTPConnection(ip_server, port_server);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,6 +77,7 @@ public class HTTPConnection {
 	public void closeConnection() {
 		try {
 			socket.close();
+			instance = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

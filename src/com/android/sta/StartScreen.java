@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class StartScreen extends Activity implements OnClickListener{
-	private static final String TAG = "STA.StartScreen";
+	public static final String TAG = "STA.StartScreen";
 	private static String FileName = "aaas.txt";
 	public static final int CONNECT_OPT_ID = Menu.FIRST;
 	public static final int CLEAR_D_ID = Menu.FIRST+1;
