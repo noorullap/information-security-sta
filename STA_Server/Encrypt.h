@@ -11,7 +11,7 @@
  * @author Robert Khasanov
  *
  */
-public class XorEncryption {
+class XorEncryption {
 	private:
 	static const int MIN_KEY_LENGTH = 9;
 	static const int MAX_KEY_LENGTH = 29;
@@ -29,7 +29,7 @@ public class XorEncryption {
 		for( i = MIN_KEY_LENGTH; 
 			 (i <= MAX_KEY_LENGTH) && ( (1 << i) < key);
 			 i++ );
-		assert 1<<i > key;
+		assert (1<<i > key);
 		return i;
 	}
 	
@@ -89,9 +89,10 @@ public class XorEncryption {
 		XorEncryption m = new XorEncryption( key);
 		return m.Decrypt(str);
 	}
+}
+
 	/** debug function */
-	private:
-	static void printbinary( QVector<char> str){
+	void printbinary( QVector<char> str){
 		QString binary[] = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", 
                 "1001", "1010", "1011", "1100", "1101", 
                 "1110", "1111" };
@@ -103,8 +104,7 @@ public class XorEncryption {
 	}
 	
 	/** debug function */
-	public:
-	static void main(QString args[]){
+	void main(){
 		long int key = 1234;
 		QString mess = new QString("I love you!");
 		printbinary(mess.getBytes());
@@ -113,4 +113,3 @@ public class XorEncryption {
 		QVector<char> cmess = Decrypt( smess,key);
 		printbinary(cmess);
 	}
-}
