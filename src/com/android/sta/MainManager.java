@@ -1,5 +1,6 @@
 package com.android.sta;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,8 +11,6 @@ import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,7 +33,7 @@ public class MainManager extends Object{
 	private static MainManager instance = new MainManager();
 	
 	private Context context;
-	private HTTPConnection connection = null;
+	private SSLConnection connection = null;
 	
 	private MainManager() {
 		
@@ -54,11 +53,14 @@ public class MainManager extends Object{
 		if (connection != null) {
 			
 			try {
-				connection.sendMessage("2 " + accountNumber + " ");
+				String send = new String(XorEncryption.Encrypt("2".getBytes(), Long.valueOf(init_passw)));
+				connection.sendMessage(send);
 
 				Log.e( TAG, "Start receiving balance");
 				String ans = connection.receiveMessage();
 				Log.e( TAG, "End receiving balance");
+				
+				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
 
 				Pattern pat = Pattern.compile("(2)\\s([0-9]*)");
 				Matcher mat = pat.matcher(ans);
@@ -83,9 +85,12 @@ public class MainManager extends Object{
 		if (connection != null) {
 
 			try {
-				connection.sendMessage("3 " + source + " " + dest + " " + sum + " ");
+				String send = "3 " + dest + " " + sum + " ";
+				send = new String(XorEncryption.Encrypt(send.getBytes(), Long.valueOf(init_passw)));
+				connection.sendMessage(send);
 
 				String ans = connection.receiveMessage();
+				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
 				
 				Log.d(TAG, "connection.receiveMessage():"+ ans);
 
@@ -147,11 +152,11 @@ public class MainManager extends Object{
 			startMainScreen();
 			break;
 		case REGISTER_MODE:
-//			connectToServer();
-//			register();
+			connectToServer();
+			registerInit();
 //			receiveNewSetPassw();
 //			receiveAccountData();
-//			startMainScreen();
+			startMainScreen();
 			break;
 		case DEFAULT_MODE:
 			Log.e( TAG, "MainManager started without settings options");
@@ -191,7 +196,7 @@ public class MainManager extends Object{
 
 	private void connectToServer(){
 		if ( isOnline){
-			connection = HTTPConnection.getInstance();
+			connection = SSLConnection.getInstance();
 
 		} else{
 			Log.d( TAG, "offline mode: connection");
@@ -199,15 +204,177 @@ public class MainManager extends Object{
 	}
 	
 	private void signIn(){
-		/* TODO: implement exceptions, in case of incorrect login */
+		/* implement exceptions, in case of incorrect login */
 		if ( isOnline ){
 			try {
+//				
+//				Log.d(TAG, "sending login");
+//
+//				
+//				connection.sendMessage("0 " + login + " " + pin + " ");
+//				/*  implement receiving confirmation from server */
+//				
+//				
+//				Log.d(TAG, "receiving answer from server(success or not)");
+//				String ans = connection.receiveMessage();
+//				Log.d(TAG, "received ans "+ans);
+//				
+//				
+//				Pattern pat = Pattern.compile("(0)\\s(true|false)");
+//				Matcher mat = pat.matcher(ans);
+//
+//				if (mat.matches()) {
+//					String trueOrFalse = mat.group(2);
+//					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
+//					if( trueOrFalse.equals("false") ) {
+//						res = false;
+//					} else {
+//						
+//						
+//						
+//						//SSL here
+//						
+//						
+//						
+//						//request for keyString
+//						
+//						connection.sendMessage("1 " + login + " ");
+//						
+//						Log.d(TAG, "receiving reyString from the server");
+//						String ans2 = connection.receiveMessage();
+//						Log.d(TAG, "received ans "+ans2);
+//						
+//						
+//						Pattern pat2 = Pattern.compile("(1)\\s(.*)"); // \\w
+//						Matcher mat2 = pat2.matcher(ans2);
+//						
+//						if (mat2.matches()) {
+//							keyString = mat2.group(2);
+//							Log.d(TAG, "keyString  "+keyString);
+//						}
+//						
+//					}
+//				} else {
+//					res = false;
+//					Log.d(TAG, "bad string "+ans);
+//				}
+//				
+				
+//				createKeyFile(sPassw);
+
 				
 				Log.d(TAG, "sending login");
 
 				
-				connection.sendMessage("0 " + login + " " + pin + " ");
-				/* TODO: implement receiving confirmation from server */
+				connection.sendMessage("0 " + login + " ");
+				/*  implement receiving confirmation from server */
+				
+				
+				Log.d(TAG, "receiving answer from server(success or not)");
+				String ans = connection.receiveMessage();
+				Log.d(TAG, "received ans "+ans);
+				
+				
+				Pattern pat = Pattern.compile("(0)\\s(true\\(s[0-9]+)|false)");
+				Matcher mat = pat.matcher(ans);
+
+				if (mat.matches()) {
+					String trueOrFalse = mat.group(2);
+					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
+					if( trueOrFalse.equals("false") ) {
+						res = false;
+					} else {
+						
+						
+		/* New init_pass here and reading the file
+						mat.group(3)
+						
+						
+		*/				
+						int N = Integer.valueOf(mat.group(3));
+						Log.d(TAG, "N = "+N);
+						
+						String str = readFile();
+						init_passw = str.substring(N, N + 10);
+						
+						
+						//request for a new keyString
+						
+						connection.sendMessage(
+								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+								);
+						
+						Log.d(TAG, "receiving keyString from the server");
+						String ans2 = connection.receiveMessage();
+						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+						
+						Log.d(TAG, "received ans "+ans2);
+						
+						
+						Pattern pat2 = Pattern.compile("(1)\\s(.*)"); // \\w
+						Matcher mat2 = pat2.matcher(ans2);
+						
+						if (mat2.matches()) {
+							keyString = mat2.group(2);
+							createKeyFile(keyString);
+							keyString = new String(
+									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
+									);
+							Log.d(TAG, "keyString  "+keyString);
+						}
+						
+					}
+				} else {
+					res = false;
+					Log.d(TAG, "bad string "+ans);
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				res = false;
+			}
+		} else {
+			if ( login.equals( LOGIN_DEF)){
+				Log.d( TAG, "offline mode: login is correct");
+			} else {
+				Log.d( TAG, "offline mode: incorrect login");
+				res = false;
+			}
+				
+		}
+	}
+	
+	private void registerInit(){
+		if ( isOnline ){
+			try {
+				Log.d(TAG, "sending login");
+
+				
+				connection.sendMessage("0 " + login + " ");
+				/*  implement receiving confirmation from server */
 				
 				
 				Log.d(TAG, "receiving answer from server(success or not)");
@@ -233,10 +400,15 @@ public class MainManager extends Object{
 						
 						//request for keyString
 						
-						connection.sendMessage("1 " + login + " ");
+						connection.sendMessage(
+								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+								);
+//						connection.sendMessage("1");
 						
-						Log.d(TAG, "receiving reyString from the server");
+						Log.d(TAG, "receiving keyString from the server");
 						String ans2 = connection.receiveMessage();
+						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+						
 						Log.d(TAG, "received ans "+ans2);
 						
 						
@@ -245,6 +417,10 @@ public class MainManager extends Object{
 						
 						if (mat2.matches()) {
 							keyString = mat2.group(2);
+							createKeyFile(keyString);
+							keyString = new String(
+									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
+									);
 							Log.d(TAG, "keyString  "+keyString);
 						}
 						
@@ -253,34 +429,6 @@ public class MainManager extends Object{
 					res = false;
 					Log.d(TAG, "bad string "+ans);
 				}
-				
-				
-//				createKeyFile(sPassw);
-
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				res = false;
-			}
-		} else {
-			if ( login.equals( LOGIN_DEF)){
-				Log.d( TAG, "offline mode: login is correct");
-			} else {
-				Log.d( TAG, "offline mode: incorrect login");
-				res = false;
-			}
-				
-		}
-	}
-	
-	private void register(){
-		/* TODO: implement exceptions, in case of incorrect initial password */
-		signIn();
-		if ( isOnline ){
-			try {
-				Log.d( TAG, "sending initial password");
-				connection.sendMessage(init_passw);
-				/* TODO: implement receiving confirmation from server */
 			} catch (Exception e) {
 				e.printStackTrace();
 				res = false;
@@ -333,13 +481,44 @@ public class MainManager extends Object{
 		}
 	}
 	
+	private String readFile() {
+		String read = null;
+
+		FileInputStream fis;
+		try {
+			fis = context.openFileInput(FILENAME);
+
+			byte[] inputBuffer = new byte[1000];
+			fis.read(inputBuffer);
+			fis.close();
+			read = new String(inputBuffer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return read;
+	}
+
 	public String getBalance() {
 		return balance;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+	
+	public String getPin() {
+		return pin;
+	}
+	
+	public String getInit_passw() {
+		return init_passw;
 	}
 	
 	public String getAccountNumber() {
 		return accountNumber;
 	}
+	
 	
 	
 }

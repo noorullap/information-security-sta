@@ -14,21 +14,21 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class HTTPConnection {
+public class SSLConnection {
 
 	private String SERVERIP = null;
 	private int SERVERPORT = 45000;
 	private static Socket socket = null;
-	private static HTTPConnection instance = null;
+	private static SSLConnection instance = null;
 	
-	private HTTPConnection(String ip, String port) throws IOException {
+	private SSLConnection(String ip, String port) throws IOException {
 		SERVERIP = ip;
 		SERVERPORT = Integer.valueOf(port).intValue();
 		InetAddress serverAddr = InetAddress.getByName(SERVERIP);
 		socket = new Socket(serverAddr, SERVERPORT);
 	}
 	
-	public static HTTPConnection getInstance() {
+	public static SSLConnection getInstance() {
 		if (instance == null) {
 			try {
 				Context context = MainManager.getInstance().getContext();
@@ -38,7 +38,7 @@ public class HTTPConnection {
 				String port_server = settings.getString(context.getString(R.string.server_port), "45000");
 				Log.d( StartScreen.TAG, "connecting to "+ip_server+":"+port_server);
 				
-				instance = new HTTPConnection(ip_server, port_server);
+				instance = new SSLConnection(ip_server, port_server);
 				
 				return instance;
 			} catch (IOException e) {

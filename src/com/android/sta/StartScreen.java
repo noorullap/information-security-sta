@@ -57,7 +57,7 @@ public class StartScreen extends Activity implements OnClickListener{
 
 		case R.id.init_reg:
 			Log.d(TAG, "onClick: initial registration");
-//			startInitReg();
+			startInitReg();
 			break;
 		
 		}

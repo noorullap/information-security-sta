@@ -56,7 +56,7 @@ public class MainScreen extends Activity implements OnClickListener{
 		
 		case R.id.getBalance:
 			Log.d(TAG, "onClick: get Balance");
-			String balance = mMainManager.getBalanceFromServer("1");
+			String balance = mMainManager.getBalanceFromServer(mMainManager.getLogin());
 			mBalanceText.setText(balance);
 			break;
 
@@ -79,7 +79,7 @@ public class MainScreen extends Activity implements OnClickListener{
 		case R.id.exit:
 			Log.d(TAG,"onClick: exit");
 			/** TODO: add additional code before log out */
-			HTTPConnection.closeConnection();
+			SSLConnection.closeConnection();
 			finish();
 			break;
 		
