@@ -54,16 +54,18 @@ public class MainManager extends Object{
 			
 			try {
 //				String send = new String(XorEncryption.Encrypt("2".getBytes(), Long.valueOf(init_passw)));
-//				connection.sendMessage(send);
-				connection.sendMessage("2");
+				String send = Caesar.getEncryption("2", init_passw);
+				connection.sendMessage(send);
+//				connection.sendMessage("2");
 
 				Log.e( TAG, "Start receiving balance");
 				String ans = connection.receiveMessage();
 				Log.e( TAG, "End receiving balance");
 				
 //				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
-
-				Pattern pat = Pattern.compile("(2)\\s([0-9]*)");
+				ans = Caesar.getDecryption(ans, init_passw);
+				
+				Pattern pat = Pattern.compile("(2)[\\s]+([0-9]*)[\\s]*");
 				Matcher mat = pat.matcher(ans);
 
 				if (mat.matches()) {
@@ -88,10 +90,12 @@ public class MainManager extends Object{
 			try {
 				String send = "3 " + dest + " " + sum + " ";
 //				send = new String(XorEncryption.Encrypt(send.getBytes(), Long.valueOf(init_passw)));
+				send = Caesar.getEncryption(send, init_passw);
 				connection.sendMessage(send);
 
 				String ans = connection.receiveMessage();
 //				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
+				ans = Caesar.getDecryption(ans, init_passw);
 				
 				Log.d(TAG, "connection.receiveMessage():"+ ans);
 
@@ -187,7 +191,7 @@ public class MainManager extends Object{
 	}
 
 	private void receiveAccountData() {
-		/* TODO: implement receiving account information */
+		/*  implement receiving account information */
 		if ( isOnline){
 			
 		} else {
@@ -297,20 +301,31 @@ public class MainManager extends Object{
 						Log.d(TAG, "N = "+N);
 						
 						String str = readFile();
+						Log.d(TAG, "key from file "+str);
+						
+						str = Caesar.getDecryption(str, init_passw);
+						Log.d(TAG, "key from file after Caesar "+str);
+						
+						
+						
 						init_passw = str.substring(N*10, N*10 + 10);
 						Log.d(TAG, "NEW INIT_PASSW "+init_passw);
 						
 						//request for a new keyString
 						Log.d(TAG, "sendind 1");
-						connection.sendMessage("1");
+						
+						connection.sendMessage(
+								//new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+								Caesar.getEncryption("1", init_passw)
+						);
+					
+						//connection.sendMessage("1");
 						Log.d(TAG, "1 has been sent");
-//						connection.sendMessage(
-//								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
-//								);
-//						
+						
 						Log.d(TAG, "receiving keyString from the server");
 						String ans2 = connection.receiveMessage();
 						//ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+						ans2 = Caesar.getDecryption(ans2, init_passw);
 						
 						Log.d(TAG, "received ans "+ans2);
 						
@@ -325,6 +340,12 @@ public class MainManager extends Object{
 //									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
 //									);
 							Log.d(TAG, "keyString  "+keyString);
+							
+							keyString = Caesar.getDecryption(keyString, init_passw);
+							
+							Log.d(TAG, "keyString  "+keyString);
+						} else {
+							
 						}
 						
 					}
@@ -404,17 +425,20 @@ public class MainManager extends Object{
 						
 						
 						//request for keyString
+						Log.d(TAG, "sendind 1");
 						
-//						connection.sendMessage(
-//								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
-//								);
-						Log.d(TAG, "sending 1  ");
-						connection.sendMessage("1");
-						Log.d(TAG, "1 has been sent ");
+						connection.sendMessage(
+								//new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+								Caesar.getEncryption("1", init_passw)
+						);
+					
+						//connection.sendMessage("1");
+						Log.d(TAG, "1 has been sent");
 						
 						Log.d(TAG, "receiving keyString from the server");
 						String ans2 = connection.receiveMessage();
 //						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+						ans2 = Caesar.getDecryption(ans2, init_passw);
 						
 						Log.d(TAG, "received ans "+ans2);
 						
