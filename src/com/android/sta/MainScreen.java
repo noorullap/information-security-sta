@@ -56,15 +56,15 @@ public class MainScreen extends Activity implements OnClickListener{
 		
 		case R.id.getBalance:
 			Log.d(TAG, "onClick: get Balance");
-			String balance = mMainManager.getBalanceFromServer(account);
+			String balance = mMainManager.getBalanceFromServer(mMainManager.getLogin());
 			mBalanceText.setText(balance);
 			break;
 
 		case R.id.transfer:
 			Log.d(TAG, "onClick: transfer");
-			String source = mSourceText.toString();
-			String destination = mDestinationText.toString();
-			String amount = mAmountText.toString();
+			String source = mSourceText.getText().toString();
+			String destination = mDestinationText.getText().toString();
+			String amount = mAmountText.getText().toString();
 			if ( mMainManager.transferMoney(source, destination, amount) )
 			{
 				Log.d(TAG, "onClick: tranfer done");
@@ -74,10 +74,12 @@ public class MainScreen extends Activity implements OnClickListener{
 				Log.d(TAG, "onClick: transfer error");
 				Toast.makeText(this, "Tranfer error!", Toast.LENGTH_LONG).show();
 			}
+			break;
 		
 		case R.id.exit:
 			Log.d(TAG,"onClick: exit");
 			/** TODO: add additional code before log out */
+			SSLConnection.closeConnection();
 			finish();
 			break;
 		

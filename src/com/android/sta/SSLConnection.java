@@ -9,24 +9,38 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class HTTPConnection {
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+public class SSLConnection {
 
 	private String SERVERIP = null;
 	private int SERVERPORT = 45000;
-	private Socket socket = null;
-	private static HTTPConnection instance = null;
+	private static Socket socket = null;
+	private static SSLConnection instance = null;
 	
-	private HTTPConnection(String ip) throws IOException {
+	private SSLConnection(String ip, String port) throws IOException {
 		SERVERIP = ip;
-		//InetAddress serverAddr = InetAddress.getByName(SERVERIP);
-		InetAddress serverAddr = InetAddress.getByName("93.175.1.18");
+		SERVERPORT = Integer.valueOf(port).intValue();
+		InetAddress serverAddr = InetAddress.getByName(SERVERIP);
 		socket = new Socket(serverAddr, SERVERPORT);
 	}
 	
-	public static HTTPConnection getInstance(String ip) {
+	public static SSLConnection getInstance() {
 		if (instance == null) {
 			try {
-				return new HTTPConnection(ip);
+				Context context = MainManager.getInstance().getContext();
+				
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+				String ip_server = settings.getString( context.getString(R.string.server_host), "127.0.0.1");
+				String port_server = settings.getString(context.getString(R.string.server_port), "45000");
+				Log.d( StartScreen.TAG, "connecting to "+ip_server+":"+port_server);
+				
+				instance = new SSLConnection(ip_server, port_server);
+				
+				return instance;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -61,9 +75,12 @@ public class HTTPConnection {
 		
 	}
 	
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
-			socket.close();
+			if (instance != null) {
+				socket.close();
+				instance = null;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

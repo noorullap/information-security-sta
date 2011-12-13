@@ -15,14 +15,14 @@ package com.android.sta;
 public class XorEncryption {
 	
 	private static final int MIN_KEY_LENGTH = 9;
-	private static final int MAX_KEY_LENGTH = 13;
-	private int key = 0; 
+	private static final int MAX_KEY_LENGTH = 29;
+	private long key = 0; 
 	
-	public XorEncryption(int key) {
+	public XorEncryption(long key) {
 		this.key = key;
 	}
 
-	private static int getKeyPeriod( int key){
+	private static int getKeyPeriod( long key){
 		int i;
 		assert 1 << MIN_KEY_LENGTH <= key;
 		for( i = MIN_KEY_LENGTH; 
@@ -32,7 +32,7 @@ public class XorEncryption {
 		return i;
 	}
 	
-	private byte getbyteFromKeyShifted( int key, int pos){
+	private byte getbyteFromKeyShifted( long key, int pos){
 		int period = getKeyPeriod( key);
 		if ( pos > period - 8){
 			byte res = (byte) (key << (pos + 8 - period));
@@ -44,7 +44,7 @@ public class XorEncryption {
 			
 	}
 	
-	private byte[] expandKey( int key, int size){
+	private byte[] expandKey( long key, int size){
 		assert size > 0;
 		int period = getKeyPeriod( key);
 		byte[] keyArray = new byte[size];
@@ -73,12 +73,12 @@ public class XorEncryption {
 		return Encrypt( str);
 	}
 	
-	public static byte[] Encrypt( byte[] str, int key){
+	public static byte[] Encrypt( byte[] str, long key){
 		XorEncryption m = new XorEncryption( key);
 		return m.Encrypt(str);
 	}
 	
-	public static byte[] Decrypt( byte[] str, int key){
+	public static byte[] Decrypt( byte[] str, long key){
 		XorEncryption m = new XorEncryption( key);
 		return m.Decrypt(str);
 	}
@@ -95,14 +95,14 @@ public class XorEncryption {
 	}
 	
 	/** debug function */
-	public static void main(String args[]){
-		int key = 1234;
-		String mess = new String("I love you!");
-		printbinary(mess.getBytes());
-		byte[] smess = Encrypt(mess.getBytes(),key);
-		printbinary(smess);
-		byte[] cmess = Decrypt( smess,key);
-		printbinary(cmess);
-
-	}
+//	public static void main(String args[]){
+//		int key = 1234;
+//		String mess = new String("I love you!");
+//		printbinary(mess.getBytes());
+//		byte[] smess = Encrypt(mess.getBytes(),key);
+//		printbinary(smess);
+//		byte[] cmess = Decrypt( smess,key);
+//		printbinary(cmess);
+//
+//	}
 }

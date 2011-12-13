@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class StartScreen extends Activity implements OnClickListener{
-	private static final String TAG = "STA.StartScreen";
+	public static final String TAG = "STA.StartScreen";
 	private static String FileName = "aaas.txt";
 	public static final int CONNECT_OPT_ID = Menu.FIRST;
 	public static final int CLEAR_D_ID = Menu.FIRST+1;
@@ -57,7 +57,7 @@ public class StartScreen extends Activity implements OnClickListener{
 
 		case R.id.init_reg:
 			Log.d(TAG, "onClick: initial registration");
-//			startInitReg();
+			startInitReg();
 			break;
 		
 		}
@@ -106,7 +106,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		String login = mLoginText.getText().toString();
 		String init_passw = mIPasswText.getText().toString();
 		
-		mMainManager.setForSigningIn( this, login, init_passw, 
+		mMainManager.setForRegister( this, login, init_passw, 
 									  !mOfflineCheckBox.isChecked());
 		
 		if ( mMainManager.start())
