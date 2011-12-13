@@ -106,7 +106,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		String login = mLoginText.getText().toString();
 		String init_passw = mIPasswText.getText().toString();
 		
-		mMainManager.setForSigningIn( this, login, init_passw, 
+		mMainManager.setForRegister( this, login, init_passw, 
 									  !mOfflineCheckBox.isChecked());
 		
 		if ( mMainManager.start())

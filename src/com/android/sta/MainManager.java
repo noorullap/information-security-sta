@@ -53,14 +53,15 @@ public class MainManager extends Object{
 		if (connection != null) {
 			
 			try {
-				String send = new String(XorEncryption.Encrypt("2".getBytes(), Long.valueOf(init_passw)));
-				connection.sendMessage(send);
+//				String send = new String(XorEncryption.Encrypt("2".getBytes(), Long.valueOf(init_passw)));
+//				connection.sendMessage(send);
+				connection.sendMessage("2");
 
 				Log.e( TAG, "Start receiving balance");
 				String ans = connection.receiveMessage();
 				Log.e( TAG, "End receiving balance");
 				
-				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
+//				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
 
 				Pattern pat = Pattern.compile("(2)\\s([0-9]*)");
 				Matcher mat = pat.matcher(ans);
@@ -86,11 +87,11 @@ public class MainManager extends Object{
 
 			try {
 				String send = "3 " + dest + " " + sum + " ";
-				send = new String(XorEncryption.Encrypt(send.getBytes(), Long.valueOf(init_passw)));
+//				send = new String(XorEncryption.Encrypt(send.getBytes(), Long.valueOf(init_passw)));
 				connection.sendMessage(send);
 
 				String ans = connection.receiveMessage();
-				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
+//				ans = new String( XorEncryption.Decrypt(ans.getBytes(), Long.valueOf(init_passw)));
 				
 				Log.d(TAG, "connection.receiveMessage():"+ ans);
 
@@ -266,7 +267,7 @@ public class MainManager extends Object{
 				Log.d(TAG, "sending login");
 
 				
-				connection.sendMessage("0 " + login + " ");
+				connection.sendMessage("0 " + login);
 				/*  implement receiving confirmation from server */
 				
 				
@@ -275,7 +276,7 @@ public class MainManager extends Object{
 				Log.d(TAG, "received ans "+ans);
 				
 				
-				Pattern pat = Pattern.compile("(0)\\s(true\\(s[0-9]+)|false)");
+				Pattern pat = Pattern.compile("(0)[\\s]+(true[\\s]+([0-9]+)|false)[\\s]*");
 				Matcher mat = pat.matcher(ans);
 
 				if (mat.matches()) {
@@ -283,6 +284,7 @@ public class MainManager extends Object{
 					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
 					if( trueOrFalse.equals("false") ) {
 						res = false;
+						SSLConnection.closeConnection();
 					} else {
 						
 						
@@ -295,31 +297,33 @@ public class MainManager extends Object{
 						Log.d(TAG, "N = "+N);
 						
 						String str = readFile();
-						init_passw = str.substring(N, N + 10);
-						
+						init_passw = str.substring(N*10, N*10 + 10);
+						Log.d(TAG, "NEW INIT_PASSW "+init_passw);
 						
 						//request for a new keyString
-						
-						connection.sendMessage(
-								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
-								);
-						
+						Log.d(TAG, "sendind 1");
+						connection.sendMessage("1");
+						Log.d(TAG, "1 has been sent");
+//						connection.sendMessage(
+//								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+//								);
+//						
 						Log.d(TAG, "receiving keyString from the server");
 						String ans2 = connection.receiveMessage();
-						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+						//ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
 						
 						Log.d(TAG, "received ans "+ans2);
 						
 						
-						Pattern pat2 = Pattern.compile("(1)\\s(.*)"); // \\w
+						Pattern pat2 = Pattern.compile("(1)[\\s]+(.*)"); // \\w
 						Matcher mat2 = pat2.matcher(ans2);
 						
 						if (mat2.matches()) {
 							keyString = mat2.group(2);
 							createKeyFile(keyString);
-							keyString = new String(
-									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
-									);
+//							keyString = new String(
+//									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
+//									);
 							Log.d(TAG, "keyString  "+keyString);
 						}
 						
@@ -373,7 +377,7 @@ public class MainManager extends Object{
 				Log.d(TAG, "sending login");
 
 				
-				connection.sendMessage("0 " + login + " ");
+				connection.sendMessage("0 " + login);
 				/*  implement receiving confirmation from server */
 				
 				
@@ -382,7 +386,7 @@ public class MainManager extends Object{
 				Log.d(TAG, "received ans "+ans);
 				
 				
-				Pattern pat = Pattern.compile("(0)\\s(true|false)");
+				Pattern pat = Pattern.compile("(0)[\\s]+(true|false)[\\s]*");
 				Matcher mat = pat.matcher(ans);
 
 				if (mat.matches()) {
@@ -390,6 +394,7 @@ public class MainManager extends Object{
 					Log.d(TAG, "trueOrFalse  "+trueOrFalse);
 					if( trueOrFalse.equals("false") ) {
 						res = false;
+						SSLConnection.closeConnection();
 					} else {
 						
 						
@@ -400,27 +405,29 @@ public class MainManager extends Object{
 						
 						//request for keyString
 						
-						connection.sendMessage(
-								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
-								);
-//						connection.sendMessage("1");
+//						connection.sendMessage(
+//								new String(XorEncryption.Encrypt("1".getBytes(), Long.valueOf(init_passw)))
+//								);
+						Log.d(TAG, "sending 1  ");
+						connection.sendMessage("1");
+						Log.d(TAG, "1 has been sent ");
 						
 						Log.d(TAG, "receiving keyString from the server");
 						String ans2 = connection.receiveMessage();
-						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
+//						ans2 = new String( XorEncryption.Decrypt(ans2.getBytes(), Long.valueOf(init_passw)));
 						
 						Log.d(TAG, "received ans "+ans2);
 						
 						
-						Pattern pat2 = Pattern.compile("(1)\\s(.*)"); // \\w
+						Pattern pat2 = Pattern.compile("(1)[\\s]+(.*)"); // \\w
 						Matcher mat2 = pat2.matcher(ans2);
 						
 						if (mat2.matches()) {
 							keyString = mat2.group(2);
 							createKeyFile(keyString);
-							keyString = new String(
-									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
-									);
+//							keyString = new String(
+//									XorEncryption.Decrypt(keyString.getBytes(), Long.valueOf(pin))
+//									);
 							Log.d(TAG, "keyString  "+keyString);
 						}
 						
@@ -483,18 +490,20 @@ public class MainManager extends Object{
 	
 	private String readFile() {
 		String read = null;
-
+		Log.d(TAG, "reading file");
 		FileInputStream fis;
 		try {
 			fis = context.openFileInput(FILENAME);
 
-			byte[] inputBuffer = new byte[1000];
+			byte[] inputBuffer = new byte[5000];
 			fis.read(inputBuffer);
 			fis.close();
 			read = new String(inputBuffer);
+			Log.d(TAG, "reading file");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Log.d(TAG, "reading file ended");
 
 		return read;
 	}
