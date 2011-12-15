@@ -70,7 +70,8 @@ public class Alphabet {
         alphabet+=Alphabet.getEnglishL();
         alphabet+=Alphabet.getEnglishU();
         alphabet+=Alphabet.getNumbers();
-        alphabet+=Alphabet.getSpecialCharacters();
+        alphabet+=" ";
+        //alphabet+=Alphabet.getSpecialCharacters();
         return alphabet;
     }
 }

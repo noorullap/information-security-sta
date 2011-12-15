@@ -48,15 +48,18 @@ public class StartScreen extends Activity implements OnClickListener{
 
 	/** Handling pressing buttons */
 	public void onClick( View view){
+		
 		switch ( view.getId() ){
 		
 		case R.id.sign_in:
 			Log.d(TAG, "onClick: signing-in");
+			SSLConnection.closeConnection();
 			startSignIn();
 			break;
 
 		case R.id.init_reg:
 			Log.d(TAG, "onClick: initial registration");
+			SSLConnection.closeConnection();
 			startInitReg();
 			break;
 		

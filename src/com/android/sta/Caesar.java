@@ -34,11 +34,12 @@ public class Caesar {
         }
         return cipher;
     }
-
+    
+    //Android
 	private static int hash_key( String str){
 		int res = 0;
 		for (int i=0;i<str.length();i++){
-			res += alphabet.indexOf(str.charAt(i));
+			res = (res + alphabet.indexOf(str.charAt(i)))%alphabet.length();
 		}
 		return res;
 	}
@@ -51,6 +52,7 @@ public class Caesar {
      */
     public static String getDecryption(String cipher, String key_str){
 		int position = hash_key( key_str);
+		//System.out.println(position);
         String text ="";
         for(int i=0;i<cipher.length();i++){
             if(alphabet.indexOf(cipher.charAt(i))-position<0){
