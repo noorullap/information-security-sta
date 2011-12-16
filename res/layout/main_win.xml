@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
-    <LinearLayout android:orientation="horizontal"
+<!--    <LinearLayout android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
@@ -17,7 +17,7 @@
           android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:layout_weight="4"/>
-    </LinearLayout>
+    </LinearLayout> -->
         
     <LinearLayout android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <LinearLayout android:orientation="horizontal"
+<!--     <LinearLayout android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
@@ -52,7 +52,7 @@
           android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:layout_weight="4"/>
-    </LinearLayout>
+    </LinearLayout> -->
 
     <LinearLayout android:orientation="horizontal"
         android:layout_width="fill_parent"

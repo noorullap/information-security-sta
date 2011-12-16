@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class MainScreen extends Activity implements OnClickListener{
 	private static final String TAG = "STAStart";
 	private String account;
-	private EditText mAccountText, mBalanceText, mSourceText, mDestinationText, mAmountText;
+	private EditText mBalanceText, /* mSourceText, */ mDestinationText, mAmountText;
 	private MainManager mMainManager;
 	
 	public static final String EXT_ACCOUNT = "account";
@@ -28,14 +28,14 @@ public class MainScreen extends Activity implements OnClickListener{
         account = extras.getString(EXT_ACCOUNT);
         mMainManager = MainManager.getInstance();
         
-        mAccountText = (EditText) findViewById(R.id.account);
+//        mAccountText = (EditText) findViewById(R.id.account);
         mBalanceText = (EditText) findViewById(R.id.balance);
-        mSourceText = (EditText) findViewById(R.id.source);
+//        mSourceText = (EditText) findViewById(R.id.source);
         mDestinationText = (EditText) findViewById(R.id.destination);
         mAmountText = (EditText) findViewById(R.id.amount);
 		
-        mAccountText.setText(account);
-        mSourceText.setText(account);
+//        mAccountText.setText(account);
+//        mSourceText.setText(account);
 
 		/** Button "Refresh" */
 		Button getBalanceButton = (Button) findViewById(R.id.getBalance);
@@ -62,10 +62,10 @@ public class MainScreen extends Activity implements OnClickListener{
 
 		case R.id.transfer:
 			Log.d(TAG, "onClick: transfer");
-			String source = mSourceText.getText().toString();
+//			String source = mSourceText.getText().toString();
 			String destination = mDestinationText.getText().toString();
 			String amount = mAmountText.getText().toString();
-			if ( mMainManager.transferMoney(source, destination, amount) )
+			if ( mMainManager.transferMoney(account, destination, amount) )
 			{
 				Log.d(TAG, "onClick: tranfer done");
 				Toast.makeText(this, "Tranfer done!", Toast.LENGTH_LONG).show();
