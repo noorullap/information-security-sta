@@ -1,0 +1,1 @@
+The goal of the project is to develop secure authentication system capable of providing high security level without additional hardware used when working with secure remote data base.

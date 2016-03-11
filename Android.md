@@ -1,0 +1,16 @@
+# Useful Links #
+
+  1. [Android developers site (official);](http://developer.android.com/index.html)
+  1. [Android 'Must-know' (in Russian);](http://habrahabr.ru/blogs/android_development/120772/)
+  1. [Short guide in Russian;](http://habrahabr.ru/blogs/android_development/115122/)
+  1. [Подробное руководство по установке Android-x86](http://habrahabr.ru/blogs/android_development/119931/)
+  1. [Разработка приложений на языке Scala](http://habrahabr.ru/blogs/android_development/128511/#habracut)
+  1. [Создаём модульное приложение](http://habrahabr.ru/blogs/android_development/123306/)
+  1. [Пишем игру для Android c помощью AndEngine.](http://habrahabr.ru/blogs/android_development/120716/)
+  1. [Next steps](http://developer.android.com/sdk/installing.html#NextSteps)
+  1. [Application fundamentals](http://developer.android.com/guide/topics/fundamentals.html)
+  1. [Common Tasks and How to Do Them in Android](http://developer.android.com/resources/faq/commontasks.html)
+  1. [Android networking sample](http://www.ibm.com/developerworks/opensource/library/os-android-networking/)
+  1. [How to build and install App on real device](http://stackoverflow.com/questions/4600891/how-to-build-apk-file)
+  1. [quick start programming on android](http://megadarja.blogspot.com/2008/10/android-1-android.html)
+  1. [Tutorial for development simple game on android](http://megadarja.blogspot.com/2009/03/android-1-surface.html)
